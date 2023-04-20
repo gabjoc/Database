@@ -3,7 +3,7 @@
 using System;
 using MySql.Data.MySqlClient;
 
-using Org.Ktu.Isk.P175B602.Autonuoma.Models;
+using Org.Ktu.Isk.P175B602.Autonuoma.Models.Preke;
 
 
 /// <summary>
@@ -45,16 +45,17 @@ public class PrekeRepo
 	{
 		var query =	 
 		$@"SELECT
-		  p.prekes_kodas,
+		 p.prekes_kodas,
 		 p.pavadinimas,
 		 p.kaina,
 		 p.galiojimo_trukme,
-		 k.pavadinimas AS kategorijos_pavadinimas,
+		vadinima k.pas AS kategorijos_pavadinimas,
 		 g.pavadinimas AS gamintojo_pavadinimas
 		 FROM
 		 `prekes` p
 		 LEFT JOIN `kategorijos` k ON k.kategorijos_id = p.fk_KATEGORIJAkategorijos_id
 		 LEFT JOIN `gamintojai` g ON g.gamintojo_id = p.fk_GAMINTOJASgamintojo_id
+		 WHERE prekes_kodas = ?id
 		 ORDER BY p.prekes_kodas ASC";
 
 		var drc =
@@ -99,7 +100,7 @@ public class PrekeRepo
 		return result;
 	}
 	//kuriamas naujas Preke
-	public static void Insert(PrekeCE preke)
+	public static int Insert(PrekeCE preke)
 	{
 		var query =
 			$@"INSERT INTO `prekes`
@@ -124,7 +125,7 @@ public class PrekeRepo
 				?FkGamintojas
 			)";
 
-		Sql.Insert(query, args => {
+		int id = (int)Sql.Insert(query, args => {
 			args.Add("?pavadinimas", preke.Preke.Pavadinimas);
 			args.Add("?sudetis", preke.Preke.Sudetis);
 			args.Add("?kaina", preke.Preke.Kaina);
@@ -134,6 +135,8 @@ public class PrekeRepo
 			args.Add("?FkKategorija", preke.Preke.FkKategorija);
 			args.Add("?FkGamintojas", preke.Preke.FkGamintojas);
 		});
+
+		return id;
 	}
 	//atnaujinamas Preke (imama ce nes pardes id - numeriukas)
 	public static void Update(PrekeCE preke)

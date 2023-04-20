@@ -1,4 +1,4 @@
-﻿namespace Org.Ktu.Isk.P175B602.Autonuoma.Models;
+﻿namespace Org.Ktu.Isk.P175B602.Autonuoma.Models.Preke;
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -59,6 +59,7 @@ public class PrekeCE
 		public string Sudetis { get; set; }
 
 		[DisplayName("Kaina")]
+		[Range(0, 3000, ErrorMessage = "Kaina must be positive number.")]
 		[Required]
 		public decimal Kaina { get; set; }
 
@@ -72,6 +73,7 @@ public class PrekeCE
 		[Required]
 		public string Ispejimai { get; set; }
 		[DisplayName("Galiojimo trukmė")]
+		[Range(0, 100, ErrorMessage = "Galiojimas must be positive number.")]
 		[Required]
 		public int Galiojimas { get; set; }
 
@@ -101,4 +103,6 @@ public class PrekeCE
 	/// Lists for drop down controls.
 	/// </summary>
 	public ListsM Lists { get; set; } = new ListsM();
+
+	public List<PrekesLikutis> Likuciai { get; set; }
 }

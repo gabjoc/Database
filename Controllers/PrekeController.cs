@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 using Org.Ktu.Isk.P175B602.Autonuoma.Repositories;
 using Org.Ktu.Isk.P175B602.Autonuoma.Models;
+using Org.Ktu.Isk.P175B602.Autonuoma.Models.Preke;
 
 
 /// <summary>
@@ -40,24 +41,98 @@ public class PrekeController : Controller
 	/// <summary>
 	/// This is invoked when buttons are pressed in the creation form.
 	/// </summary>
+	/// <param name="save">If not null, indicates that 'Save' button was clicked.</param>
+	/// <param name="add">If not null, indicates that 'Add' button was clicked.</param>
+	/// <param name="remove">If not null, indicates that 'Remove' button was clicked and contains id of the item to remove.</param>
 	/// <param name="preke">Entity model filled with latest data.</param>
-	/// <returns>Returns creation from view or redirects back to Index if save is successfull.</returns>
+	/// <returns>Returns creation from view or redirects back to Index if save is successful.</returns>
 	[HttpPost]
-	public ActionResult Create(PrekeCE prek)
+	public ActionResult Create(int? save, int? add, int? remove, PrekeCE model)
 	{
-		
-		//form field validation passed?
-		if( ModelState.IsValid )
+		bool isValid = ModelState.IsValid;
+		//addition of new 'Likutis' record was requested?
+		if( add != null )
 		{
-			PrekeRepo.Insert(prek);
+			//add entry for the new record
+			var pl =
+				new PrekesLikutis {
+					Likutis = {
+						Kiekis = 1,
+						FkParduotuve = 0
+					}
+				};
+			//model.Likuciai.Add(pl);
 
-			//save success, go back to the entity list
-			return RedirectToAction("Index");
+			//make sure @Html helper is not reusing old model state containing the old list
+			ModelState.Clear();
+
+			//go back to the form
+			return View(model);
 		}
 		
-		//form field validation failed, go back to the form
-		PopulateSelections(prek);
-		return View(prek);
+		//removal of existing 'PaslauguKainos' record was requested?
+		if( remove != null )
+		{
+			/*
+			//filter out 'PaslauguKainos' record having in-list-id the same as the given one
+			paslaugaEvm.Kainos =
+				paslaugaEvm
+					.Kainos
+					.Where(it => it.InListId != remove.Value)
+					.ToList();
+
+			//make sure @Html helper is not reusing old model state containing the old list
+			ModelState.Clear();
+
+			//go back to the form
+			return View(paslaugaEvm);
+			*/
+		}
+
+		//save of the form data was requested?
+		if( save != null )
+		{
+			/*
+			//check for duplicate 'GaliojaNuo' fields in 'PaslaugosKainos' list
+			for( var index = 0; index < paslaugaEvm.Kainos.Count; index++ )
+			{
+				//find all entries that are not current one and have matching 'GaliojaNuo' field
+				var matches = 
+					paslaugaEvm.Kainos.Where((other, otherIndex) => {
+						return 
+							other.GaliojaNuo == paslaugaEvm.Kainos[index].GaliojaNuo &&
+							otherIndex != index;
+					})
+					.ToList();
+
+				//entries found? mark current field as invalid by adding error message to model state
+				if( matches.Count > 0 )
+					ModelState.AddModelError($"Kainos[{index}].GaliojaNuo", "Field value already exists");
+				
+			}*/
+			
+			//form field validation passed?
+			if( ModelState.IsValid )
+			{
+				//insert 'Preke'
+				int prekesId = PrekeRepo.Insert(model);
+
+				//insert related 'Likutis'
+				/*foreach( var likutisInForm in model.Likuciai )
+				{					
+					PrekesLikutisRepo.Insert(likutisInForm);
+				}*/
+
+				//save success, go back to the entity list
+				return RedirectToAction("Index");
+			}
+			//form field validation failed, go back to the form
+			{
+				return View(model);
+			}
+		}
+
+		throw new Exception("Klaida");
 	}
 
 	/// <summary>
@@ -81,6 +156,7 @@ public class PrekeController : Controller
 	[HttpPost]
 	public ActionResult Edit(int id, PrekeCE prek)
 	{
+		
 		//form field validation passed?
 		if (ModelState.IsValid)
 		{
@@ -141,6 +217,7 @@ public class PrekeController : Controller
 		//load entities for the select lists
 		var kategorijos = KategorijaRepo.ListKategorija();
 		var gamintojai = GamintojasRepo.ListGamintojas();
+		prek.Likuciai = PrekesLikutisRepo.LoadForPreke(prek.Preke.PrekesKodas);
 
 		//build select lists
 		prek.Lists.Kategorijos = 
