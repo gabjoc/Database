@@ -104,7 +104,6 @@ public class PrekeRepo
 		var query =
 			$@"INSERT INTO `prekes`
 			(
-				`prekes_kodas`,
 				`pavadinimas`,
 				`sudetis`,
 				`kaina`,
@@ -115,7 +114,6 @@ public class PrekeRepo
 				`fk_GAMINTOJASgamintojo_id`
 			)
 			VALUES (
-				?kodas,
 				?pavadinimas,
 				?sudetis,
 				?kaina,
@@ -127,8 +125,6 @@ public class PrekeRepo
 			)";
 
 		Sql.Insert(query, args => {
-			
-			args.Add("?kodas", preke.Preke.PrekesKodas);
 			args.Add("?pavadinimas", preke.Preke.Pavadinimas);
 			args.Add("?sudetis", preke.Preke.Sudetis);
 			args.Add("?kaina", preke.Preke.Kaina);
