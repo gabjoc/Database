@@ -43,21 +43,21 @@ public class PrekeController : Controller
 	/// <param name="preke">Entity model filled with latest data.</param>
 	/// <returns>Returns creation from view or redirects back to Index if save is successfull.</returns>
 	[HttpPost]
-	public ActionResult Create(PrekeCE preke)
+	public ActionResult Create(PrekeCE prek)
 	{
 		
 		//form field validation passed?
 		if( ModelState.IsValid )
 		{
-			PrekeRepo.Insert(preke);
+			PrekeRepo.Insert(prek);
 
 			//save success, go back to the entity list
 			return RedirectToAction("Index");
 		}
 		
 		//form field validation failed, go back to the form
-		PopulateSelections(preke);
-		return View(preke);
+		PopulateSelections(prek);
+		return View(prek);
 	}
 
 	/// <summary>
@@ -76,22 +76,22 @@ public class PrekeController : Controller
 	/// This is invoked when buttons are pressed in the editing form.
 	/// </summary>
 	/// <param name="id">ID of the entity being edited</param>		
-	/// <param name="preke">Entity model filled with latest data.</param>
+	/// <param name="prek">Entity model filled with latest data.</param>
 	/// <returns>Returns editing from view or redirects back to Index if save is successfull.</returns>
 	[HttpPost]
-	public ActionResult Edit(int id, PrekeCE preke)
+	public ActionResult Edit(int id, PrekeCE prek)
 	{
 		//form field validation passed?
 		if (ModelState.IsValid)
 		{
-			PrekeRepo.Update(preke);
+			PrekeRepo.Update(prek);
 
 			//save success, go back to the entity list
 			return RedirectToAction("Index");
 		}
 		//form field validation failed, go back to the form
-		PopulateSelections(preke);
-		return View(preke);
+		PopulateSelections(prek);
+		return View(prek);
 	}
 
 	/// </summary>
@@ -134,16 +134,16 @@ public class PrekeController : Controller
 	/// <summary>
 	/// Populates select lists used to render drop down controls.
 	/// </summary>
-	/// <param name="preke">'PrekeCE' view model to append to.</param>
+	/// <param name="prek">'PrekeCE' view model to append to.</param>
 	//skirtas tam kad parduotuvesid galetume matyti kaip jos pavadinima
-	public void PopulateSelections(PrekeCE preke)
+	public void PopulateSelections(PrekeCE prek)
 	{
 		//load entities for the select lists
 		var kategorijos = KategorijaRepo.ListKategorija();
 		var gamintojai = GamintojasRepo.ListGamintojas();
 
 		//build select lists
-		preke.Lists.Kategorijos = 
+		prek.Lists.Kategorijos = 
 			kategorijos.Select(it => {
 				return
 					new SelectListItem() { 
@@ -154,7 +154,7 @@ public class PrekeController : Controller
 			.ToList();
 
 		//build select lists
-		preke.Lists.Gamintojai = 
+		prek.Lists.Gamintojai = 
 			gamintojai.Select(it => {
 				return
 					new SelectListItem() { 

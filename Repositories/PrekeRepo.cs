@@ -151,7 +151,7 @@ public class PrekeRepo
 				`aprasymas` = ?aprasymas,
 				`ispejimai` = ?ispejimai,
 				`galiojimo_trukme` = ?galiojimas,
-				`fk_KATEGORIJAkategorijos_id` = ?kategorija
+				`fk_KATEGORIJAkategorijos_id` = ?kategorija,
 				`fk_GAMINTOJASgamintojo_id` = ?gamintojas
 			WHERE
 				prekes_kodas=?kodas";
