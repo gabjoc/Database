@@ -104,5 +104,5 @@ public class PrekeCE
 	/// </summary>
 	public ListsM Lists { get; set; } = new ListsM();
 
-	public List<PrekesLikutis> Likuciai { get; set; }
+	public List<PrekesLikutis> Likuciai { get; set; } = new List<PrekesLikutis>();
 }

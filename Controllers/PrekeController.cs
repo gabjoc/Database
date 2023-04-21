@@ -44,12 +44,11 @@ public class PrekeController : Controller
 	/// <param name="save">If not null, indicates that 'Save' button was clicked.</param>
 	/// <param name="add">If not null, indicates that 'Add' button was clicked.</param>
 	/// <param name="remove">If not null, indicates that 'Remove' button was clicked and contains id of the item to remove.</param>
-	/// <param name="preke">Entity model filled with latest data.</param>
+	/// <param name="model">Entity model filled with latest data.</param>
 	/// <returns>Returns creation from view or redirects back to Index if save is successful.</returns>
 	[HttpPost]
 	public ActionResult Create(int? save, int? add, int? remove, PrekeCE model)
 	{
-		bool isValid = ModelState.IsValid;
 		//addition of new 'Likutis' record was requested?
 		if( add != null )
 		{
@@ -57,36 +56,37 @@ public class PrekeController : Controller
 			var pl =
 				new PrekesLikutis {
 					Likutis = {
+						InListId = model.Likuciai.Count,
 						Kiekis = 1,
 						FkParduotuve = 0
 					}
 				};
-			//model.Likuciai.Add(pl);
+			model.Likuciai.Add(pl);
 
 			//make sure @Html helper is not reusing old model state containing the old list
 			ModelState.Clear();
 
 			//go back to the form
+			PopulateSelections(model);
 			return View(model);
 		}
 		
-		//removal of existing 'PaslauguKainos' record was requested?
+		//removal of existing 'Likutis' record was requested?
 		if( remove != null )
 		{
-			/*
-			//filter out 'PaslauguKainos' record having in-list-id the same as the given one
-			paslaugaEvm.Kainos =
-				paslaugaEvm
-					.Kainos
-					.Where(it => it.InListId != remove.Value)
+			//filter out 'Likutis' record having in-list-id the same as the given one
+			model.Likuciai =
+				model
+					.Likuciai
+					.Where(it => it.Likutis.InListId != remove.Value)
 					.ToList();
 
 			//make sure @Html helper is not reusing old model state containing the old list
 			ModelState.Clear();
 
 			//go back to the form
-			return View(paslaugaEvm);
-			*/
+			PopulateSelections(model);
+			return View(model);
 		}
 
 		//save of the form data was requested?
@@ -217,7 +217,7 @@ public class PrekeController : Controller
 		//load entities for the select lists
 		var kategorijos = KategorijaRepo.ListKategorija();
 		var gamintojai = GamintojasRepo.ListGamintojas();
-		prek.Likuciai = PrekesLikutisRepo.LoadForPreke(prek.Preke.PrekesKodas);
+		//prek.Likuciai = PrekesLikutisRepo.LoadForPreke(prek.Preke.PrekesKodas); // sita reikia kazkaip padaryti kai darome edit, bet ne kai create
 
 		//build select lists
 		prek.Lists.Kategorijos = 
