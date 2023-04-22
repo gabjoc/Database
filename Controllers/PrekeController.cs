@@ -118,10 +118,11 @@ public class PrekeController : Controller
 				int prekesId = PrekeRepo.Insert(model);
 
 				//insert related 'Likutis'
-				/*foreach( var likutisInForm in model.Likuciai )
+				foreach( var likutisInForm in model.Likuciai )
 				{					
+					likutisInForm.Likutis.FkPreke = prekesId;
 					PrekesLikutisRepo.Insert(likutisInForm);
-				}*/
+				}
 
 				//save success, go back to the entity list
 				return RedirectToAction("Index");

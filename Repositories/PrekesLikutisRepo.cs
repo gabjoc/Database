@@ -54,20 +54,17 @@ public class PrekesLikutisRepo
 		string query = 
 			$@"INSERT INTO `likuciai`
 			(
-				likucio_id,
 				kiekis,
 				fk_PARDUOTUVEparduotuves_id,
 				fk_PREKEprekes_kodas
 			)
 			VALUES(
-				?likucio_id,
 				?kiekis,
 				?fk_PARDUOTUVEparduotuves_id,
 				?fk_PREKEprekes_kodas
 			)";
 
 		Sql.Insert(query, args => {
-			args.Add("?likucio_id", likutis.Likutis.Id);
 			args.Add("?kiekis", likutis.Likutis.Kiekis);
 			args.Add("?fk_PARDUOTUVEparduotuves_id", likutis.Likutis.FkParduotuve);
 			args.Add("?fk_PREKEprekes_kodas", likutis.Likutis.FkPreke);
