@@ -15,7 +15,7 @@
 <div class="main-content-lst">
 	<table class="entity-list">
 		<thead>
-			<td>
+			<tr>
 				<th>
 					@Html.DisplayNameFor(model => model.PirkejasNr)
 				</th>
@@ -38,11 +38,11 @@
 					@Html.DisplayNameFor(model => model.Epastas)
 				</th>
 				<th></th>
-			</td>
+			</tr>
 		</thead>
 		<tbody>
 			@foreach (var item in Model) {
-			<td>
+			<tr>
 				<td>
 					@Html.DisplayFor(model => item.PirkejasNr)
 				</td>
@@ -55,9 +55,9 @@
 				<td>
 					@Html.DisplayFor(model => item.Saskaita)
 				</td>
-				<th>
-					@Html.DisplayNameFor(model => item.Adresas)
-				</th>
+				<td>
+					@Html.DisplayFor(model => item.Adresas)
+				</td>
 				<td>
 					@Html.DisplayFor(model => item.Telefonas)
 				</td>
@@ -68,7 +68,7 @@
 					<a href="@Url.Action("Edit", new { id = item.PirkejasNr })" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Redaguoti</a>
 					<a href="@Url.Action("Delete", new { id = item.PirkejasNr })" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Šalinti</a>
 				</td>
-			</td>
+			</tr>
 			}
 		</tbody>
 	</table>

@@ -40,7 +40,6 @@ public class AutomobilisCE
 		[Required]
 		public int Id { get; set; }
 
-
 		[DisplayName("Valstybinis Nr.")]
 		[MaxLength(6)]
 		[Required]
@@ -81,8 +80,6 @@ public class AutomobilisCE
 		[DataType(DataType.Currency)]
 		public decimal Verte { get; set; }
 
-
-
 		[DisplayName("Būsena")]
 		public int? FkBusena { get; set; }
 
@@ -119,7 +116,6 @@ public class AutomobilisCE
 		public IList<SelectListItem> DegaluTipai { get; set; }
 		public IList<SelectListItem> Lagaminai { get; set; }
 	}
-
 
 	/// <summary>
 	/// Automobilis.
