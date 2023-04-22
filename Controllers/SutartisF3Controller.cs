@@ -453,7 +453,7 @@ public class SutartisF3Controller : Controller
 					return
 						new SelectListItem
 						{
-							Value = it.PirkejasNr,
+							
 							Text = $"{it.Vardas} {it.Pavarde}"
 						};
 				})
