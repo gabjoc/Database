@@ -91,26 +91,7 @@ public class PrekeController : Controller
 
 		//save of the form data was requested?
 		if( save != null )
-		{
-			/*
-			//check for duplicate 'GaliojaNuo' fields in 'PaslaugosKainos' list
-			for( var index = 0; index < paslaugaEvm.Kainos.Count; index++ )
-			{
-				//find all entries that are not current one and have matching 'GaliojaNuo' field
-				var matches = 
-					paslaugaEvm.Kainos.Where((other, otherIndex) => {
-						return 
-							other.GaliojaNuo == paslaugaEvm.Kainos[index].GaliojaNuo &&
-							otherIndex != index;
-					})
-					.ToList();
-
-				//entries found? mark current field as invalid by adding error message to model state
-				if( matches.Count > 0 )
-					ModelState.AddModelError($"Kainos[{index}].GaliojaNuo", "Field value already exists");
-				
-			}*/
-			
+		{			
 			//form field validation passed?
 			if( ModelState.IsValid )
 			{
@@ -219,7 +200,9 @@ public class PrekeController : Controller
 		var kategorijos = KategorijaRepo.ListKategorija();
 		var gamintojai = GamintojasRepo.ListGamintojas();
 		var parduotuves = ParduotuveRepo.ListParduotuve();
-		//prek.Likuciai = PrekesLikutisRepo.LoadForPreke(prek.Preke.PrekesKodas); // sita reikia kazkaip padaryti kai darome edit, bet ne kai create
+
+		if (prek.Preke.PrekesKodas != 0)
+			prek.Likuciai = PrekesLikutisRepo.LoadForPreke(prek.Preke.PrekesKodas);
 
 		//build select lists
 		prek.Lists.Kategorijos = 

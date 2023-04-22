@@ -18,7 +18,7 @@ public class PrekesLikutisRepo
 				pl.fk_PREKEprekes_kodas
 			FROM
 			 `likuciai` as pl
-			WHERE pl.likucio_id=?id
+			WHERE pl.fk_PREKEprekes_kodas=?id
 			ORDER BY pl.kiekis DESC";
 
 		var drc =

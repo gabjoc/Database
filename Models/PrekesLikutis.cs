@@ -22,6 +22,7 @@ public class PrekesLikutis
 
 		[DisplayName("Kiekis")]
 		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = "Kiekis must be a positive number.")]
 		public int Kiekis { get; set; }
 	
 		[DisplayName("Parduotuvė")]
