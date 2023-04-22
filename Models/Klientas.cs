@@ -10,9 +10,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 /// </summary>
 public class Klientas
 {
-	[DisplayName("Asmens kodas")]
-	[Required]
-	public string AsmensKodas { get; set; }
+	[DisplayName("Pirkėjo numeris")]
+	public int PirkejasNr { get; set; }
 	
 	[DisplayName("Vardas")]
 	[Required]
@@ -22,18 +21,19 @@ public class Klientas
 	[Required]
 	public string Pavarde { get; set; }
 
-	[DisplayName("Gimimo data")]
-	[DataType(DataType.Date)]
-	[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
+	[DisplayName("Banko sąskaitos Nr.")]
 	[Required]
-	public DateTime? GimimoData { get; set; }
+	public string Saskaita { get; set; }
 
-	[DisplayName("Telefonas")]
+	[DisplayName("Adresas")]
+	[Required]
+	public string Adresas { get; set; }
+
+	[DisplayName("Telefono Nr.")]
 	[Required]
 	public string Telefonas { get; set; }
 
 	[DisplayName("Elektroninis paštas")]
-	[EmailAddress]
 	[Required]
 	public string Epastas { get; set; }
 }

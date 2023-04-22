@@ -15,9 +15,9 @@
 <div class="main-content-lst">
 	<table class="entity-list">
 		<thead>
-			<tr>
+			<td>
 				<th>
-					@Html.DisplayNameFor(model => model.AsmensKodas)
+					@Html.DisplayNameFor(model => model.PirkejasNr)
 				</th>
 				<th>
 					@Html.DisplayNameFor(model => model.Vardas)
@@ -26,7 +26,10 @@
 					@Html.DisplayNameFor(model => model.Pavarde)
 				</th>
 				<th>
-					@Html.DisplayNameFor(model => model.GimimoData)
+					@Html.DisplayNameFor(model => model.Saskaita)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Adresas)
 				</th>
 				<th>
 					@Html.DisplayNameFor(model => model.Telefonas)
@@ -35,13 +38,13 @@
 					@Html.DisplayNameFor(model => model.Epastas)
 				</th>
 				<th></th>
-			</tr>
+			</td>
 		</thead>
 		<tbody>
 			@foreach (var item in Model) {
-			<tr>
+			<td>
 				<td>
-					@Html.DisplayFor(model => item.AsmensKodas)
+					@Html.DisplayFor(model => item.PirkejasNr)
 				</td>
 				<td>
 					@Html.DisplayFor(model => item.Vardas)
@@ -50,8 +53,11 @@
 					@Html.DisplayFor(model => item.Pavarde)
 				</td>
 				<td>
-					@Html.DisplayFor(model => item.GimimoData)
+					@Html.DisplayFor(model => item.Saskaita)
 				</td>
+				<th>
+					@Html.DisplayNameFor(model => item.Adresas)
+				</th>
 				<td>
 					@Html.DisplayFor(model => item.Telefonas)
 				</td>
@@ -59,10 +65,10 @@
 					@Html.DisplayFor(model => item.Epastas)
 				</td>
 				<td>
-					<a href="@Url.Action("Edit", new { id = item.AsmensKodas })" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Redaguoti</a>
-					<a href="@Url.Action("Delete", new { id = item.AsmensKodas })" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Šalinti</a>
+					<a href="@Url.Action("Edit", new { id = item.PirkejasNr })" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Redaguoti</a>
+					<a href="@Url.Action("Delete", new { id = item.PirkejasNr })" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Šalinti</a>
 				</td>
-			</tr>
+			</td>
 			}
 		</tbody>
 	</table>

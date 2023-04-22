@@ -344,7 +344,7 @@ public class SutartisF2Controller : Controller
 					return
 						new SelectListItem
 						{
-							Value = it.AsmensKodas,
+							Value = it.PirkejasNr,
 							Text = $"{it.Vardas} {it.Pavarde}"
 						};
 				})

@@ -12,75 +12,72 @@ public class KlientasRepo
 {
 	public static List<Klientas> List()
 	{
-		var query = $@"SELECT * FROM `{Config.TblPrefix}klientai` ORDER BY asmens_kodas ASC";
+		var query = $@"SELECT * FROM `klientai` ORDER BY pirkejo_nr ASC";
 		var drc = Sql.Query(query);
 
 		var result = 
 			Sql.MapAll<Klientas>(drc, (dre, t) => {
-				t.AsmensKodas = dre.From<string>("asmens_kodas");
+				t.PirkejasNr = dre.From<int>("pirkejo_nr");
 				t.Vardas = dre.From<string>("vardas");
 				t.Pavarde = dre.From<string>("pavarde");
-				t.GimimoData = dre.From<DateTime>("gimimo_data");
+				t.Saskaita = dre.From<string>("saskaitos_nr");
+				t.Adresas = dre.From<string>("adresas");
 				t.Telefonas = dre.From<string>("telefonas");
-				t.Epastas = dre.From<string>("epastas");
+				t.Epastas = dre.From<string>("el_pastas");
 			});
 
 		return result;
 	}
 
-	public static Klientas Find(string asmkodas)
+	public static Klientas Find(string pirknr)
 	{
-		var query = $@"SELECT * FROM `{Config.TblPrefix}klientai` WHERE asmens_kodas=?asmkodas";
+		var query = $@"SELECT * FROM `klientai` WHERE pirkejo_nr=?pirknr";
 
 		var drc =
 			Sql.Query(query, args => {
-				args.Add("?asmkodas", asmkodas);
+				args.Add("?pirknr", pirknr);
 			});
 
-		if( drc.Count > 0 )
-		{
 			var result = 
 				Sql.MapOne<Klientas>(drc, (dre, t) => {
-					t.AsmensKodas = dre.From<string>("asmens_kodas");
+					t.PirkejasNr = dre.From<int>("pirkejo_nr");
 					t.Vardas = dre.From<string>("vardas");
 					t.Pavarde = dre.From<string>("pavarde");
-					t.GimimoData = dre.From<DateTime>("gimimo_data");
+					t.Saskaita = dre.From<string>("saskaitos_nr");
+					t.Adresas = dre.From<string>("adresas");
 					t.Telefonas = dre.From<string>("telefonas");
-					t.Epastas = dre.From<string>("epastas");
+					t.Epastas = dre.From<string>("el_pastas");
 				});
 
 			return result;
-		}
-
-		return null;
 	}
 
 	public static void Insert(Klientas klientas)
 	{
 		var query =
-			$@"INSERT INTO `{Config.TblPrefix}klientai`
+			$@"INSERT INTO `klientai`
 			(
-				asmens_kodas,
 				vardas,
 				pavarde,
-				gimimo_data,
+				saskaitos_nr,
+				adresas,
 				telefonas,
-				epastas
+				el_pastas
 			)
 			VALUES(
-				?asmkod,
 				?vardas,
 				?pavarde,
-				?gimdata,
+				?saskaita,
+				?adresas,
 				?tel,
 				?email
 			)";
 
 		Sql.Insert(query, args => {
-			args.Add("?asmkod", klientas.AsmensKodas);
 			args.Add("?vardas", klientas.Vardas);
 			args.Add("?pavarde", klientas.Pavarde);
-			args.Add("?gimdata", klientas.GimimoData);
+			args.Add("?saskaita", klientas.Saskaita);
+			args.Add("?adresas", klientas.Adresas);
 			args.Add("?tel", klientas.Telefonas);
 			args.Add("?email", klientas.Epastas);
 		});
@@ -89,21 +86,23 @@ public class KlientasRepo
 	public static void Update(Klientas klientas)
 	{
 		var query =
-			$@"UPDATE `{Config.TblPrefix}klientai`
+			$@"UPDATE `klientai`
 			SET
 				vardas=?vardas,
 				pavarde=?pavarde,
-				gimimo_data=?gimdata,
+				saskaitos_nr=?saskaita,
+				adresas=?adresas,
 				telefonas=?tel,
-				epastas=?email
+				el_pastas=?email
 			WHERE
-				asmens_kodas=?asmkod";
+				pirkejo_nr=?pirknr";
 
 		Sql.Update(query, args => {
-			args.Add("?asmkod", klientas.AsmensKodas);
+			args.Add("?pirknr", klientas.PirkejasNr);
 			args.Add("?vardas", klientas.Vardas);
 			args.Add("?pavarde", klientas.Pavarde);
-			args.Add("?gimdata", klientas.GimimoData);
+			args.Add("?saskaita", klientas.Saskaita);
+			args.Add("?adresas", klientas.Adresas);
 			args.Add("?tel", klientas.Telefonas);
 			args.Add("?email", klientas.Epastas);
 		});
@@ -111,7 +110,7 @@ public class KlientasRepo
 
 	public static void Delete(string id)
 	{
-		var query = $@"DELETE FROM `{Config.TblPrefix}klientai` WHERE asmens_kodas=?id";
+		var query = $@"DELETE FROM `klientai` WHERE pirkejo_nr=?id";
 		Sql.Delete(query, args => {
 			args.Add("?id", id);
 		});

@@ -24,12 +24,9 @@
 
 	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
+	@Html.HiddenFor(m => m.PirkejasNr)
+
 	<fieldset>
-		<div class="form-group">
-			@Html.LabelFor(m => m.AsmensKodas)
-			@Html.EditorFor(m => m.AsmensKodas, new { htmlAttributes = new { @readonly = "readonly" } })
-			@Html.ValidationMessageFor(m => m.AsmensKodas, "")
-		</div>
 
 		<div class="form-group">
 			@Html.LabelFor(m => m.Vardas)
@@ -44,9 +41,15 @@
 		</div>
 
 		<div class="form-group">
-			@Html.LabelFor(m => m.GimimoData)
-			@Html.TextBoxFor(m => m.GimimoData, "{0:yyyy-MM-dd}", new { @class = "date-picker" })
-			@Html.ValidationMessageFor(m => m.GimimoData, "")
+			@Html.LabelFor(m => m.Saskaita)
+			@Html.TextBoxFor(m => m.Saskaita)
+			@Html.ValidationMessageFor(m => m.Saskaita, "")
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(m => m.Adresas)
+			@Html.TextBoxFor(m => m.Adresas)
+			@Html.ValidationMessageFor(m => m.Adresas, "")
 		</div>
 
 		<div class="form-group">

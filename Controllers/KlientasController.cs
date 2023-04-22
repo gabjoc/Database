@@ -18,7 +18,8 @@ public class KlientasController : Controller
 	[HttpGet]
 	public ActionResult Index()
 	{
-		return View(KlientasRepo.List());
+		var klientas  = KlientasRepo.List();
+		return View(klientas);
 	}
 
 	/// <summary>
@@ -40,12 +41,6 @@ public class KlientasController : Controller
 	[HttpPost]
 	public ActionResult Create(Klientas klientas)
 	{
-		//do not allow creation of entity with 'asmensKodas' field matching existing one
-		var match = KlientasRepo.Find(klientas.AsmensKodas);
-
-		if( match !=null )
-			ModelState.AddModelError("asmensKodas", "Field value already exists in database.");
-
 		//form field validation passed?
 		if( ModelState.IsValid )
 		{
