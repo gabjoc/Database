@@ -15,13 +15,13 @@ public class PrekesLikutis
     public class PrekesLikutisM
 	{
 		[DisplayName("Likucio ID")]
-		[MaxLength(11)]
 		public int? Id { get; set; }
+
+		public int InListId { get; set; }
 
 		public int? FkPreke { get; set; }
 
 		[DisplayName("Kiekis")]
-		[MaxLength(11)]
 		[Required]
 		public int Kiekis { get; set; }
 	
