@@ -92,6 +92,7 @@ public class PrekeCE
 	{
 		public IList<SelectListItem> Kategorijos { get; set; }
 		public IList<SelectListItem> Gamintojai { get; set; }
+		public IList<SelectListItem> Parduotuves { get; set; }
 	}
 	
 	/// <summary>

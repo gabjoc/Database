@@ -218,6 +218,7 @@ public class PrekeController : Controller
 		//load entities for the select lists
 		var kategorijos = KategorijaRepo.ListKategorija();
 		var gamintojai = GamintojasRepo.ListGamintojas();
+		var parduotuves = ParduotuveRepo.ListParduotuve();
 		//prek.Likuciai = PrekesLikutisRepo.LoadForPreke(prek.Preke.PrekesKodas); // sita reikia kazkaip padaryti kai darome edit, bet ne kai create
 
 		//build select lists
@@ -238,6 +239,17 @@ public class PrekeController : Controller
 					new SelectListItem() { 
 						Value = Convert.ToString(it.Id), 
 						Text = it.Pavadinimas + " - " + it.Salis
+					};
+			})
+			.ToList();
+
+		//build select lists
+		prek.Lists.Parduotuves = 
+			parduotuves.Select(it => {
+				return
+					new SelectListItem() { 
+						Value = Convert.ToString(it.Parduotuvesid), 
+						Text = it.Pavadinimas + " - " + it.Adresas
 					};
 			})
 			.ToList();
