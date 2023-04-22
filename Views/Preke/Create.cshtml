@@ -104,7 +104,7 @@
 						@Html.ValidationMessageFor(m => Model.Likuciai[i].Likutis.Kiekis, "")
 					</td>
 					<td class="form-group">
-						@Html.TextBoxFor(m => Model.Likuciai[i].Likutis.FkParduotuve, "")
+						@Html.DropDownListFor(m => Model.Likuciai[i].Likutis.FkParduotuve, Model.Lists.Parduotuves, (string)ViewData["none-chosen"])
 						@Html.ValidationMessageFor(m => Model.Likuciai[i].Likutis.FkParduotuve, "")
 					</td>
 					<td>

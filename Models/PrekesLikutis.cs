@@ -2,7 +2,6 @@
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 /// <summary>
 /// 'PrekesLikutis' in create and edit forms.
@@ -23,6 +22,7 @@ public class PrekesLikutis
 
 		[DisplayName("Kiekis")]
 		[Required]
+		[Range(1, int.MaxValue, ErrorMessage = "Kiekis must be a positive number.")]
 		public int Kiekis { get; set; }
 	
 		[DisplayName("Parduotuvė")]
@@ -30,22 +30,9 @@ public class PrekesLikutis
 		public int FkParduotuve { get; set; }
 		
 	} 
-
-	/// <summary>
-	/// Select lists for making drop downs for choosing values of entity fields.
-	/// </summary>
-	public class ListsM
-	{
-		public IList<SelectListItem> Parduotuves { get; set; }
-	}
 	
 	/// <summary>
 	/// Likutis.
 	/// </summary>
 	public PrekesLikutisM Likutis { get ; set; } = new PrekesLikutisM();
-
-	/// <summary>
-	/// Lists for drop down controls.
-	/// </summary>
-	public ListsM Lists { get; set; } = new ListsM();
 }

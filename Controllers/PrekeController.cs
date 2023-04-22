@@ -91,26 +91,7 @@ public class PrekeController : Controller
 
 		//save of the form data was requested?
 		if( save != null )
-		{
-			/*
-			//check for duplicate 'GaliojaNuo' fields in 'PaslaugosKainos' list
-			for( var index = 0; index < paslaugaEvm.Kainos.Count; index++ )
-			{
-				//find all entries that are not current one and have matching 'GaliojaNuo' field
-				var matches = 
-					paslaugaEvm.Kainos.Where((other, otherIndex) => {
-						return 
-							other.GaliojaNuo == paslaugaEvm.Kainos[index].GaliojaNuo &&
-							otherIndex != index;
-					})
-					.ToList();
-
-				//entries found? mark current field as invalid by adding error message to model state
-				if( matches.Count > 0 )
-					ModelState.AddModelError($"Kainos[{index}].GaliojaNuo", "Field value already exists");
-				
-			}*/
-			
+		{			
 			//form field validation passed?
 			if( ModelState.IsValid )
 			{
@@ -118,10 +99,11 @@ public class PrekeController : Controller
 				int prekesId = PrekeRepo.Insert(model);
 
 				//insert related 'Likutis'
-				/*foreach( var likutisInForm in model.Likuciai )
+				foreach( var likutisInForm in model.Likuciai )
 				{					
+					likutisInForm.Likutis.FkPreke = prekesId;
 					PrekesLikutisRepo.Insert(likutisInForm);
-				}*/
+				}
 
 				//save success, go back to the entity list
 				return RedirectToAction("Index");
@@ -217,7 +199,10 @@ public class PrekeController : Controller
 		//load entities for the select lists
 		var kategorijos = KategorijaRepo.ListKategorija();
 		var gamintojai = GamintojasRepo.ListGamintojas();
-		//prek.Likuciai = PrekesLikutisRepo.LoadForPreke(prek.Preke.PrekesKodas); // sita reikia kazkaip padaryti kai darome edit, bet ne kai create
+		var parduotuves = ParduotuveRepo.ListParduotuve();
+
+		if (prek.Preke.PrekesKodas != 0)
+			prek.Likuciai = PrekesLikutisRepo.LoadForPreke(prek.Preke.PrekesKodas);
 
 		//build select lists
 		prek.Lists.Kategorijos = 
@@ -237,6 +222,17 @@ public class PrekeController : Controller
 					new SelectListItem() { 
 						Value = Convert.ToString(it.Id), 
 						Text = it.Pavadinimas + " - " + it.Salis
+					};
+			})
+			.ToList();
+
+		//build select lists
+		prek.Lists.Parduotuves = 
+			parduotuves.Select(it => {
+				return
+					new SelectListItem() { 
+						Value = Convert.ToString(it.Parduotuvesid), 
+						Text = it.Pavadinimas + " - " + it.Adresas
 					};
 			})
 			.ToList();
