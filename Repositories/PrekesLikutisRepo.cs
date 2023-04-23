@@ -34,6 +34,12 @@ public class PrekesLikutisRepo
 				t.Likutis.FkParduotuve = dre.From<int>("fk_PARDUOTUVEparduotuves_id");
 			});
 
+		// sito mums reikia, nes kitaip mes negalime zinoti, koks yra likucio indeksas sarase (kai istriname likuti prekes redagavime)
+		for (int i = 0; i < result.Count; i++)
+		{
+			result[i].Likutis.InListId = i;
+		}
+
 		return result;
 	}
 
@@ -42,7 +48,7 @@ public class PrekesLikutisRepo
 		var query = 
 			$@"DELETE FROM `likuciai`
 			WHERE 
-				pl.likucio_id=?Id";
+				likucio_id=?Id";
 
 		Sql.Delete(query, args => {
 			args.Add("?Id", Id);
@@ -74,12 +80,12 @@ public class PrekesLikutisRepo
 	public static void Update(PrekesLikutis likutis)
 	{
 		string query = 
-			$@"UPDATE `likuciai`
-			SET
-				kiekis = ?kiekis,
-				fk_PARDUOTUVEparduotuves_id = ?fk_PARDUOTUVEparduotuves_id				
-			WHERE 
-				likucio_id = ?likucio_id";
+		$@"UPDATE `likuciai`
+		SET
+			kiekis = ?kiekis,
+			fk_PARDUOTUVEparduotuves_id = ?fk_PARDUOTUVEparduotuves_id
+		WHERE 
+			likucio_id = ?likucio_id";
 
 		Sql.Insert(query, args => {
 			args.Add("?likucio_id", likutis.Likutis.Id);
