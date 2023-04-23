@@ -37,7 +37,7 @@ public class UzsakymasL
 public class UzsakymasCE
 {
 	/// <summary>
-	/// Automobilis.
+	/// Uzsakymas.
 	/// </summary>
 	public class UzsakymasM
 	{
@@ -102,7 +102,7 @@ public class UzsakymasCE
 
 
 /// <summary>
-/// 'AutoBusena' enumerator in lists.
+/// 'UzsakymoBusena' enumerator in lists.
 /// </summary>
 public class UzsakymoBusena
 {
@@ -112,7 +112,7 @@ public class UzsakymoBusena
 }
 
 /// <summary>
-/// 'PavaruDeze' enumerator in lists.
+/// 'Pristatymai' enumerator in lists.
 /// </summary>
 public class Pristatymai
 {
