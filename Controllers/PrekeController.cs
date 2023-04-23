@@ -127,6 +127,10 @@ public class PrekeController : Controller
 	{
 		var preke = PrekeRepo.FindCE(id);
 		PopulateSelections(preke);
+
+		// sito reikia atskiro (populateLikuciai), nes mes norime kad mums likucius is duombazes uzkrautu tik tuomet, kai mes pirma kart atidarome forma
+		// (nes kitaip istrinus is formos likuti bet neissaugojus prekes visos tai ta likuti sugrazintu nes vel uzkrove is duombazes)
+		PopulateLikuciai(preke);
 		return View(preke);
 	}
 	/// <summary>
@@ -279,9 +283,6 @@ public class PrekeController : Controller
 		var gamintojai = GamintojasRepo.ListGamintojas();
 		var parduotuves = ParduotuveRepo.ListParduotuve();
 
-		if (prek.Preke.PrekesKodas != 0 && prek.Likuciai.Count == 0)
-			prek.Likuciai = PrekesLikutisRepo.LoadForPreke(prek.Preke.PrekesKodas);
-
 		//build select lists
 		prek.Lists.Kategorijos = 
 			kategorijos.Select(it => {
@@ -314,5 +315,10 @@ public class PrekeController : Controller
 					};
 			})
 			.ToList();
+	}
+
+	public void PopulateLikuciai(PrekeCE prek)
+	{
+		prek.Likuciai = PrekesLikutisRepo.LoadForPreke(prek.Preke.PrekesKodas);
 	}
 }
