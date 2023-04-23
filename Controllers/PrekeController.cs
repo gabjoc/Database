@@ -91,7 +91,24 @@ public class PrekeController : Controller
 
 		//save of the form data was requested?
 		if( save != null )
-		{			
+		{	
+			//check for duplicate 'FkParduotuve' fields in 'Likutis' list
+			for( var index = 0; index < model.Likuciai.Count; index++ )
+			{
+				//find all entries that are not current one and have matching 'FkParduotuve' field
+				var matches = 
+					model.Likuciai.Where((other, otherIndex) => {
+						return 
+							other.Likutis.FkParduotuve == model.Likuciai[index].Likutis.FkParduotuve &&
+							otherIndex != index;
+					})
+					.ToList();
+
+				//entries found? mark current field as invalid by adding error message to model state
+				if( matches.Count > 0 )
+					ModelState.AddModelError($"Likuciai[{index}].Likutis.FkParduotuve", "Field value already exists");
+			}
+
 			//form field validation passed?
 			if( ModelState.IsValid )
 			{
@@ -110,6 +127,7 @@ public class PrekeController : Controller
 			}
 			//form field validation failed, go back to the form
 			{
+				PopulateSelections(model);
 				return View(model);
 			}
 		}
@@ -185,7 +203,24 @@ public class PrekeController : Controller
 
 		//save of the form data was requested?
 		if( save != null )
-		{			
+		{	
+			//check for duplicate 'FkParduotuve' fields in 'Likutis' list
+			for( var index = 0; index < model.Likuciai.Count; index++ )
+			{
+				//find all entries that are not current one and have matching 'FkParduotuve' field
+				var matches = 
+					model.Likuciai.Where((other, otherIndex) => {
+						return 
+							other.Likutis.FkParduotuve == model.Likuciai[index].Likutis.FkParduotuve &&
+							otherIndex != index;
+					})
+					.ToList();
+
+				//entries found? mark current field as invalid by adding error message to model state
+				if( matches.Count > 0 )
+					ModelState.AddModelError($"Likuciai[{index}].Likutis.FkParduotuve", "Field value already exists");
+			}
+
 			//form field validation passed?
 			if( ModelState.IsValid )
 			{
@@ -227,6 +262,7 @@ public class PrekeController : Controller
 			}
 			//form field validation failed, go back to the form
 			{
+				PopulateSelections(model);
 				return View(model);
 			}
 		}
