@@ -136,20 +136,98 @@ public class PrekeController : Controller
 	/// <param name="prek">Entity model filled with latest data.</param>
 	/// <returns>Returns editing from view or redirects back to Index if save is successfull.</returns>
 	[HttpPost]
-	public ActionResult Edit(int id, PrekeCE prek)
+	public ActionResult Edit(int? save, int? add, int? remove, PrekeCE model)
 	{
-		
-		//form field validation passed?
-		if (ModelState.IsValid)
+		//addition of new 'Likutis' record was requested?
+		if( add != null )
 		{
-			PrekeRepo.Update(prek);
+			//add entry for the new record
+			var pl =
+				new PrekesLikutis {
+					Likutis = {
+						InListId = model.Likuciai.Count,
+						FkPreke = model.Preke.PrekesKodas,
+						Kiekis = 1,
+						FkParduotuve = 0
+					}
+				};
+			model.Likuciai.Add(pl);
 
-			//save success, go back to the entity list
-			return RedirectToAction("Index");
+			//make sure @Html helper is not reusing old model state containing the old list
+			ModelState.Clear();
+
+			//go back to the form
+			PopulateSelections(model);
+			return View(model);
 		}
-		//form field validation failed, go back to the form
-		PopulateSelections(prek);
-		return View(prek);
+		
+		//removal of existing 'Likutis' record was requested?
+		if( remove != null )
+		{
+			//filter out 'Likutis' record having in-list-id the same as the given one
+			model.Likuciai =
+				model
+					.Likuciai
+					.Where(it => it.Likutis.InListId != remove.Value)
+					.ToList();
+
+			//make sure @Html helper is not reusing old model state containing the old list
+			ModelState.Clear();
+
+			//go back to the form
+			PopulateSelections(model);
+			return View(model);
+		}
+
+		//save of the form data was requested?
+		if( save != null )
+		{			
+			//form field validation passed?
+			if( ModelState.IsValid )
+			{
+				//update 'Preke'
+				PrekeRepo.Update(model);
+
+				//update related 'PrekesLikutis'
+				{
+					//load related 'PrekesLikutis' from DB to have most up to date data
+					var likuciaiInDb = PrekesLikutisRepo.LoadForPreke(model.Preke.PrekesKodas);
+
+					//delete 'PrekesLikutis' that are not present in form (if deletable)
+					foreach( var likutisInDb in likuciaiInDb )
+					{
+						var delete = model.Likuciai.Find(it => it.Likutis.Id == likutisInDb.Likutis.Id) == null;
+						if( delete )
+							PrekesLikutisRepo.Delete((int)likutisInDb.Likutis.Id);
+					}
+
+					//insert 'PrekesLikutis' that are not present in DB
+					foreach( var likutisInForm in model.Likuciai )
+					{
+						var insert = likuciaiInDb.Find(it => it.Likutis.Id == likutisInForm.Likutis.Id) == null;
+						if( insert )
+							PrekesLikutisRepo.Insert(likutisInForm);
+					}
+
+					//update non-readonly 'PrekesLikutis' in DB (deleted entities will simply result in no-action as far as SQL is concerned)
+					foreach( var likutisInDb in likuciaiInDb )
+					{
+						var update = model.Likuciai.Find(it => it.Likutis.Id == likutisInDb.Likutis.Id);
+						if( update != null )
+							PrekesLikutisRepo.Update(update);
+					}						
+				}
+
+				//save success, go back to the entity list
+				return RedirectToAction("Index");
+			}
+			//form field validation failed, go back to the form
+			{
+				return View(model);
+			}
+		}
+
+		throw new Exception("Klaida");
 	}
 
 	/// </summary>
@@ -201,7 +279,7 @@ public class PrekeController : Controller
 		var gamintojai = GamintojasRepo.ListGamintojas();
 		var parduotuves = ParduotuveRepo.ListParduotuve();
 
-		if (prek.Preke.PrekesKodas != 0)
+		if (prek.Preke.PrekesKodas != 0 && prek.Likuciai.Count == 0)
 			prek.Likuciai = PrekesLikutisRepo.LoadForPreke(prek.Preke.PrekesKodas);
 
 		//build select lists
