@@ -1,7 +1,6 @@
 ﻿namespace Org.Ktu.Isk.P175B602.Autonuoma.Repositories;
 
 using System;
-using MySql.Data.MySqlClient;
 
 using Org.Ktu.Isk.P175B602.Autonuoma.Models.Preke;
 
@@ -49,7 +48,7 @@ public class PrekeRepo
 		 p.pavadinimas,
 		 p.kaina,
 		 p.galiojimo_trukme,
-		vadinima k.pas AS kategorijos_pavadinimas,
+		 k.pavadinimas AS kategorijos_pavadinimas,
 		 g.pavadinimas AS gamintojo_pavadinimas
 		 FROM
 		 `prekes` p
@@ -171,7 +170,7 @@ public class PrekeRepo
 	//istrinimas
 	public static void Delete(int id)
 	{
-		var query = $@"DELETE FROM `preke` WHERE prekes_kodas=?kodas";
+		var query = $@"DELETE FROM `prekes` WHERE prekes_kodas=?kodas";
 		Sql.Delete(query, args => {
 			args.Add("?kodas", id);
 		});
